@@ -1,15 +1,34 @@
 import csv
 import numpy as np
 
+split_point = 2010
+
 
 def create_csv():
-    input_path = "data.csv"
-    vc_path = "Vc.csv"
-    vh_path = "Vh.csv"
-    with open(input_path) as fp, open(vc_path, 'wb') as vc_path, open(vh_path, 'wb') as vh_path:
+    input_data = []
+    output_data = []
+    path = "data/data.csv"
+    with open(path) as fp:
         input_reader = csv.reader(fp, delimiter=',')
-        vc_write = csv.writer(vc_path)
-        vh_write = csv.writer(vh_path)
         for row in input_reader:
-            vc_write.writerow(row[1:11])
-            vh_write.writerow(row[11:])
+            if len(row) > 0:
+                input_data.append(row[1:11])
+                output_data.append(row[11:])
+    return np.array(input_data[1:]), np.array(output_data[1:])
+
+
+def load_data():
+    input_data, output_data = create_csv()
+    # shuffle data
+    indices = np.arange(len(input_data))
+
+    np.random.shuffle(indices)
+    input_data = input_data[indices]
+    output_data = output_data[indices]
+
+    input_data_train = np.array(input_data[:split_point])
+    output_data_train = np.array(output_data[:split_point])
+    input_data_test = np.array(input_data[split_point:])
+    output_data_test = np.array(output_data[split_point:])
+
+    return (input_data_train, output_data_train), (input_data_test, output_data_test)
