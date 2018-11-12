@@ -5,13 +5,10 @@ import datamanipulations
 
 (train_data, train_labels), (test_data, test_labels) = datamanipulations.load_data()
 
-print("Training set: {}".format(train_data.shape))  # 2010 examples, 10 features
-print("Testing set:  {}".format(train_labels.shape))  # 501 examples, 10 features
-
 
 def build_model():
     model = keras.Sequential([
-        keras.layers.Dense(64, activation=tf.nn.relu,
+        keras.layers.Dense(32, activation=tf.nn.tanh,
                            input_shape=(train_data.shape[1],)),
         keras.layers.Dense(64, activation=tf.nn.relu),
         keras.layers.Dense(4)
@@ -41,4 +38,4 @@ history1 = model1.fit(train_data, train_labels, epochs=EPOCHS,
                       callbacks=[print_epoch_info()])
 [loss, mae] = model1.evaluate(test_data, test_labels, verbose=0)
 
-print("Testing set Mean Abs Error: {:7.2f}".format(mae * 1000))
+print("Testing set Mean Abs Error: ", mae)
